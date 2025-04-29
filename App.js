@@ -1,20 +1,45 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import WelcomeSleep from './screens/WelcomeSleep';
+import SleepStories from './screens/SleepStories';
+import SleepMusic from './screens/SleepMusic';
+import PlayOption from './screens/PlayOption';
+import PlayScreen from './screens/PlayScreen';
+const Stack = createStackNavigator();
 
-export default function App() {
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="WelcomeSleep">
+        <Stack.Screen 
+          name="WelcomeSleep" 
+          component={WelcomeSleep} 
+          options={{ headerShown: false }} // Ẩn tên màn hình WelcomeSleep
+        />
+        <Stack.Screen 
+          name="SleepStories" 
+          component={SleepStories} 
+          options={{ headerShown: false }} // Ẩn tên màn hình SleepStories
+        />
+        <Stack.Screen 
+          name="SleepMusic" 
+          component={SleepMusic} 
+          options={{ headerShown: false }} // Ẩn tên màn hình SleepMusic
+        />
+        <Stack.Screen 
+          name="PlayOption" 
+          component={PlayOption} 
+          options={{ headerShown: false }} // Ẩn tên màn hình SleepMusic
+        />
+        <Stack.Screen 
+          name="PlayScreen" 
+          component={PlayScreen} 
+          options={{ headerShown: false }} // Ẩn tên màn hình SleepMusic
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
