@@ -6,12 +6,36 @@ import SleepStories from './screens/SleepStories';
 import SleepMusic from './screens/SleepMusic';
 import PlayOption from './screens/PlayOption';
 import PlayScreen from './screens/PlayScreen';
+import { SplashScreen } from './screens/SplashScreen/SplashScreen';
+import { Login } from './screens/LoginScreen/LoginScreen';
+import { SignUp } from './screens/SignUpScreen/SignUpScreen';
+import { Welcome } from './screens/WelcomeScreen/WelcomeScreen';
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="WelcomeSleep">
+      <Stack.Navigator initialRouteName="Splash">
+        <Stack.Screen 
+          name="Splash" 
+          component={SplashScreen} 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen 
           name="WelcomeSleep" 
           component={WelcomeSleep} 
