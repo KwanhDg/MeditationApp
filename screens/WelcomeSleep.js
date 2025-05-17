@@ -1,45 +1,40 @@
 // WelcomeSleep.js
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 
 const WelcomeSleep = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      {/* Background Image */}
+    <SafeAreaView style={styles.container}>
       <Image
-        source={require('../assets/images/night-background.png')} // Hình nền mới mà bạn đã tải lên
+        source={require('../assets/images/night-background.png')}
         style={styles.background}
       />
-
-      {/* Content */}
-      <Image
-        source={require('../assets/images/birds-sleeping.png')} // Hình ảnh con chim ngủ
-        style={styles.image}
-      />
-
-      {/* Title and Description */}
-      <Text style={styles.title}>Welcome to Sleep</Text>
-      <Text style={styles.description}>
-        Explore the new kind of sleep. It uses sound and visualization to create perfect conditions for refreshing sleep.
-      </Text>
-
-      {/* GET STARTED Button using TouchableOpacity */}
+      <View style={styles.content}>
+        <Text style={styles.title}>Welcome to Sleep</Text>
+        <Text style={styles.description}>
+          Explore the new kind of sleep. It uses sound and visualization to create perfect conditions for refreshing sleep.
+        </Text>
+        <Image
+          source={require('../assets/images/birds-sleeping.png')}
+          style={styles.image}
+        />
+      </View>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('SleepStories')}
       >
         <Text style={styles.buttonText}>GET STARTED</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start', // Các phần tử bắt đầu từ trên cùng
+    backgroundColor: 'black',
     alignItems: 'center',
-    padding: 20,
+    justifyContent: 'flex-end',
   },
   background: {
     position: 'absolute',
@@ -47,40 +42,51 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    width: '111%',
-    height: '111%',
-    resizeMode: 'cover', // Đảm bảo hình ảnh chiếm toàn bộ màn hình mà không bị biến dạng
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingHorizontal: 24,
+    marginTop: 40,
   },
   image: {
-    position: 'absolute',
-    right: 0, // Di chuyển hình ảnh sang bên phải
-    bottom: 180, // Đặt khoảng cách từ dưới màn hình
-    width: 350, // Tăng kích thước hình ảnh
-    height: 250, // Tăng kích thước hình ảnh
+    width: '120%',
+    height: 220,
+    marginTop: 16,
+    marginBottom: 16,
+    resizeMode: 'contain',
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     color: 'white',
     fontWeight: 'bold',
-    marginTop: 180, // Kéo tiêu đề lên 30px từ trên
-    marginBottom: 10, // Giảm khoảng cách dưới tiêu đề
+    marginBottom: 16,
+    textAlign: 'center',
   },
   description: {
-    fontSize: 18,
+    fontSize: 16,
     color: 'white',
     textAlign: 'center',
-    marginBottom: 20, // Giảm khoảng cách dưới mô tả
+    marginBottom: 16,
+    lineHeight: 22,
+    opacity: 0.9,
   },
   button: {
-    marginTop: 280, // Khoảng cách từ mô tả đến nút
     backgroundColor: '#8e97fd',
     borderRadius: 25,
-    width:360,
+    width: '90%',
     paddingVertical: 15,
-    paddingHorizontal: 40,
+    alignItems: 'center',
+    marginBottom: 32,
+    alignSelf: 'center',
   },
   buttonText: {
-    color: 'white',  // Màu chữ cho nút
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',

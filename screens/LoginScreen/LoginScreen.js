@@ -45,32 +45,39 @@ export const Login = ({ navigation }) => {
     setTimeout(() => {
       inputRef.current.measureLayout(
         scrollViewRef.current,
-        (x, y) => {
-          scrollViewRef.current.scrollTo({ y, animated: true });
+        (x, y, width, height) => {
+          const offset = Platform.OS === 'ios' ? y - 80 : y - 120; // Điều chỉnh offset cho iOS và Android
+          scrollViewRef.current.scrollTo({ y: offset, animated: true });
         },
-        () => {}
+        () => {
+          console.warn('Không thể đo layout của TextInput');
+        }
       );
-    }, 100);
+    }, 200); // Tăng thời gian chờ để đảm bảo bàn phím hiển thị hoàn toàn
   };
 
   // Hàm kiểm tra tính hợp lệ cho Email
   const isEmailValid = (text) => {
-    return text !== '' && /\S+@\S+\.\S+/.test(text);
+    return text.length >= 5 && /^\S+@\S+\.\S+$/.test(text.trim());
   };
 
   // Hàm xử lý đăng nhập
   const handleLogin = async () => {
-    // Kiểm tra điều kiện
-    if (!email) {
-      Alert.alert('Error', 'Please enter Email address');
+    // Kiểm tra điều kiện đầu vào
+    if (!email.trim()) {
+      Alert.alert('Lỗi', 'Vui lòng nhập địa chỉ email');
       return;
     }
     if (!isEmailValid(email)) {
-      Alert.alert('Error', 'Please enter a valid Email address');
+      Alert.alert('Lỗi', 'Địa chỉ email không hợp lệ (ít nhất 5 ký tự và đúng định dạng)');
       return;
     }
     if (!password) {
-      Alert.alert('Error', 'Please enter Password');
+      Alert.alert('Lỗi', 'Vui lòng nhập mật khẩu');
+      return;
+    }
+    if (password.length < 8) {
+      Alert.alert('Lỗi', 'Mật khẩu phải có ít nhất 8 ký tự');
       return;
     }
 
@@ -78,27 +85,50 @@ export const Login = ({ navigation }) => {
     try {
       const storedData = await AsyncStorage.getItem('users');
       if (!storedData) {
-        Alert.alert('Error', 'No users registered');
+        Alert.alert('Lỗi', 'Không có người dùng nào được đăng ký. Vui lòng đăng ký trước!');
         return;
       }
-      const users = JSON.parse(storedData);
+
+      let users = [];
+      try {
+        users = JSON.parse(storedData);
+        if (!Array.isArray(users) || users.length === 0) {
+          Alert.alert('Lỗi', 'Dữ liệu người dùng trống hoặc không hợp lệ');
+          return;
+        }
+      } catch (parseError) {
+        console.error('Lỗi parse dữ liệu người dùng:', parseError);
+        Alert.alert('Lỗi', 'Không thể đọc dữ liệu người dùng');
+        return;
+      }
+
+      const normalizedEmail = email.trim().toLowerCase();
       const user = users.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+        (u) => u.email?.toLowerCase() === normalizedEmail && u.password === password
       );
+
       if (user) {
         // Lưu thông tin người dùng hiện tại
         await AsyncStorage.setItem('currentUser', JSON.stringify(user));
-        Alert.alert('Success', 'Login successful!', [
+        Alert.alert('Thành công', 'Đăng nhập thành công!', [
           {
             text: 'OK',
-            onPress: () => navigation.navigate('Welcome', { userName: user.userName }),
+            onPress: () => {
+              try {
+                navigation.navigate('HomeScreen', { userName: user.userName || 'Người dùng' });
+              } catch (navError) {
+                console.error('Lỗi navigation:', navError);
+                Alert.alert('Lỗi', 'Không thể chuyển hướng đến màn hình chính');
+              }
+            },
           },
         ]);
       } else {
-        Alert.alert('Error', 'Invalid email or password');
+        Alert.alert('Lỗi', 'Email hoặc mật khẩu không đúng');
       }
     } catch (error) {
-      Alert.alert('Error', 'Login failed');
+      console.error('Lỗi trong quá trình đăng nhập:', error);
+      Alert.alert('Lỗi', 'Đăng nhập thất bại, vui lòng thử lại sau');
     }
   };
 
@@ -170,7 +200,7 @@ export const Login = ({ navigation }) => {
               ref={emailRef}
               placeHolder="Email address"
               value={email}
-              isValid={false}
+              isValid={isEmailValid(email)}
               onChangeText={setEmail}
               onFocus={() => handleInputFocus(emailRef)}
             />
@@ -180,7 +210,7 @@ export const Login = ({ navigation }) => {
               ref={passwordRef}
               placeHolder="Password"
               value={password}
-              isValid={false}
+              isValid={password.length >= 8}
               onChangeText={setPassword}
               secureTextEntry={true}
               onFocus={() => handleInputFocus(passwordRef)}
@@ -193,7 +223,7 @@ export const Login = ({ navigation }) => {
           </View>
 
           {/* Forgot Password */}
-          <TouchableOpacity onPress={() => Alert.alert('Info', 'Forgot Password feature not implemented')}>
+          <TouchableOpacity onPress={() => Alert.alert('Thông tin', 'Tính năng quên mật khẩu chưa được triển khai')}>
             <Text style={styles.forgotPassword}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
@@ -204,10 +234,9 @@ export const Login = ({ navigation }) => {
             <Text style={styles.footerText1}>ALREADY HAVE AN ACCOUNT?</Text>
             <Text
               style={styles.footerText2}
-              onPress={() => navigation.navigate('SignUp')}
+              onPress={() => navigation.navigate('SignUpScreen')}
             >
-              {' '}
-              SIGN UP
+              {' '}SIGN UP
             </Text>
           </Text>
         </View>
@@ -215,4 +244,3 @@ export const Login = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-

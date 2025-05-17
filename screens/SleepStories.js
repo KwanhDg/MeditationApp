@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList, Image, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, FlatList, Image, ImageBackground, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import icon library
 import { categories } from '../data/categories'; // Import categories from file
 import { stories } from '../data/stories'; // Import stories from file
@@ -70,56 +70,60 @@ const SleepStories = ({ navigation }) => {
   }
 
   return (
-    <ImageBackground
-      source={require('../assets/images/night-background.png')}
-      style={styles.container}
-      resizeMode="cover"
-    >
-      <ScrollView
-        style={styles.scrollContainer}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={true}
+    <SafeAreaView style={{ flex: 1 }}>
+      <ImageBackground
+        source={require('../assets/images/night-background.png')}
+        style={styles.container}
+        imageStyle={{ width: '100%', height: '100%' }}
+        resizeMode="cover"
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Sleep Stories</Text>
-          <Text style={styles.headerSubtitle}>
-            Soothing bedtime stories to help you fall 
-          </Text>
-          <Text style={styles.headerSubtitle}>
-            into a deep and natural sleep
-          </Text>
-        </View>
-
-        {/* Categories */}
-        <FlatList
-          data={categories}
-          renderItem={renderCategory}
-          keyExtractor={item => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.categories}
-          contentContainerStyle={styles.categoriesContainer}
-        />
-
-        {/* Featured Story */}
-        {renderFeaturedStory(featuredStory)}
-
-        {/* Small Stories */}
-        {groupedStories.map((row, index) => (
-          <View key={index} style={styles.storyRow}>
-            {row.map(item => renderSmallStory(item))}
+        <ScrollView
+          style={styles.scrollContainer}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={true}
+        >
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Sleep Stories</Text>
+            <Text style={styles.headerSubtitle}>
+              Soothing bedtime stories to help you fall
+            </Text>
+            <Text style={styles.headerSubtitle}>
+              into a deep and natural sleep
+            </Text>
           </View>
-        ))}
-      </ScrollView>
-    </ImageBackground>
+
+          {/* Categories */}
+          <FlatList
+            data={categories}
+            renderItem={renderCategory}
+            keyExtractor={item => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.categories}
+            contentContainerStyle={styles.categoriesContainer}
+          />
+
+          {/* Featured Story */}
+          {renderFeaturedStory(featuredStory)}
+
+          {/* Small Stories */}
+          {groupedStories.map((row, index) => (
+            <View key={index} style={styles.storyRow}>
+              {row.map(item => renderSmallStory(item))}
+            </View>
+          ))}
+        </ScrollView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    width: '100%',
+    height: '100%',
   },
   scrollContainer: {
     flex: 1,
@@ -130,10 +134,10 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 20,
     marginBottom: 10,
-    paddingTop:80,
-    justifyContent: 'center', // Căn giữa nội dung theo chiều dọc
-    alignItems: 'center', // Căn giữa nội dung theo chiều ngang
-    alignSelf: 'center', // Đảm bảo nút nằm chính giữa cha của nó
+    paddingTop: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
   headerTitle: {
     fontSize: 28,
@@ -145,9 +149,9 @@ const styles = StyleSheet.create({
     color: 'white',
     opacity: 0.8,
     marginTop: 5,
-    justifyContent: 'center', // Căn giữa nội dung theo chiều dọc
-    alignItems: 'center', // Căn giữa nội dung theo chiều ngang
-    alignSelf: 'center', // Đảm bảo nút nằm chính giữa cha của nó
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
   categories: {
     marginBottom: 5,
@@ -157,11 +161,11 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     alignItems: 'center',
-    marginRight: 10, // Giảm khoảng cách giữa các danh mục
+    marginRight: 10,
     width: 70,
   },
   categoryIconContainer: {
-    backgroundColor: '#8e97fd', // Đổi màu thành #8e97fd
+    backgroundColor: '#8e97fd',
     borderRadius: 15,
     padding: 10,
     marginBottom: 5,
@@ -193,8 +197,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 15,
-    justifyContent: 'center', // Căn giữa phần tử con theo chiều dọc
-    alignItems: 'center', // Căn giữa phần tử con theo chiều ngang
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   firstStoryTitle: {
     fontSize: 24,
@@ -232,7 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'center', // Căn giữa văn bản
+    textAlign: 'center',
   },
   
   storyDetails: {
@@ -240,18 +244,18 @@ const styles = StyleSheet.create({
     color: 'white',
     opacity: 0.8,
     marginTop: 5,
-    textAlign: 'center', // Căn giữa văn bản
+    textAlign: 'center',
   },
   
   startButton: {
     backgroundColor: 'white',
     paddingVertical: 10,
     borderRadius: 20,
-    width: 100, // Đặt chiều rộng cho nút
-    justifyContent: 'center', // Căn giữa nội dung theo chiều dọc
-    alignItems: 'center', // Căn giữa nội dung theo chiều ngang
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 10,
-    alignSelf: 'center', // Đảm bảo nút nằm chính giữa cha của nó
+    alignSelf: 'center',
   },
   startButtonText: {
     color: '#23274d',

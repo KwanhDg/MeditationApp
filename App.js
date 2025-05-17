@@ -1,69 +1,48 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import WelcomeSleep from './screens/WelcomeSleep';
-import SleepStories from './screens/SleepStories';
-import SleepMusic from './screens/SleepMusic';
-import PlayOption from './screens/PlayOption';
-import PlayScreen from './screens/PlayScreen';
-import { SplashScreen } from './screens/SplashScreen/SplashScreen';
-import { Login } from './screens/LoginScreen/LoginScreen';
-import { SignUp } from './screens/SignUpScreen/SignUpScreen';
-import { Welcome } from './screens/WelcomeScreen/WelcomeScreen';
-const Stack = createStackNavigator();
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-const App = () => {
+
+import WelcomeScreen from "./screens/WelcomeScreen";
+import SignInScreen from "./screens/SignInScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import OnboardingScreen from "./screens/OnboardingScreen";
+import TopicScreen from "./screens/TopicScreen";
+import RemindersScreen from "./screens/RemindersScreen";
+import CourseDetailScreen from "./screens/CourseDetailScreen";
+import PlayerScreen from "./screens/PlayerScreen";
+import BottomTabNavigator from "./navigation/BottomTabNavigator";
+import SleepStories from "./screens/SleepStories";
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
-        <Stack.Screen 
-          name="Splash" 
-          component={SplashScreen} 
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Welcome"
-          component={Welcome}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen 
-          name="WelcomeSleep" 
-          component={WelcomeSleep} 
-          options={{ headerShown: false }} // Ẩn tên màn hình WelcomeSleep
-        />
-        <Stack.Screen 
-          name="SleepStories" 
-          component={SleepStories} 
-          options={{ headerShown: false }} // Ẩn tên màn hình SleepStories
-        />
-        <Stack.Screen 
-          name="SleepMusic" 
-          component={SleepMusic} 
-          options={{ headerShown: false }} // Ẩn tên màn hình SleepMusic
-        />
-        <Stack.Screen 
-          name="PlayOption" 
-          component={PlayOption} 
-          options={{ headerShown: false }} // Ẩn tên màn hình SleepMusic
-        />
-        <Stack.Screen 
-          name="PlayScreen" 
-          component={PlayScreen} 
-          options={{ headerShown: false }} // Ẩn tên màn hình SleepMusic
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StatusBar style="light" />
+        <Stack.Navigator
+          initialRouteName="Welcome"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          <Stack.Screen name="Topic" component={TopicScreen} />
+          <Stack.Screen name="Reminders" component={RemindersScreen} />
+          
+          {/* ⬇️ Replace HomeScreen with the BottomTabNavigator */}
+          <Stack.Screen name="MainTabs" component={BottomTabNavigator} />
+          
+          <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
+          <Stack.Screen name="Player" component={PlayerScreen} />
+          <Stack.Screen name="SleepStories" component={SleepStories} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
-};
-
-export default App;
+}
